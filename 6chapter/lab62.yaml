@@ -1,0 +1,51 @@
+---
+- name: lab62 assigment
+  hosts: all
+  vars_files:
+    - allvars.yaml
+  tasks:
+    - name: debug allvars.yaml
+      debug:
+        msg: vars are included "{{ web_root }}" and "{{ ftp_root }}"
+    - name: debug custom variables
+      debug:
+        msg: custom vars are included "{{ ansible_facts.ansible_local.files.packages.db_package }}"
+    - name: installing packages
+      yum:
+        name: "{{ item }}"
+        state: installed
+      with_items:
+        - "{{ ansible_facts.ansible_local.files.packages.smb_package }}"
+        - "{{ ansible_facts.ansible_local.files.packages.ftp_package }}"
+        - "{{ ansible_facts.ansible_local.files.packages.db_package }}"
+        - "{{ ansible_facts.ansible_local.files.packages.web_package }}"
+        - "{{ ansible_facts.ansible_local.files.packages.firewall_package }}"
+    - name: starting services
+      service:
+        name: "{{ item }}"
+        state: started
+      with_items:
+        - "{{ ansible_facts.ansible_local.service.services.smb_service }}"
+        - "{{ ansible_facts.ansible_local.service.services.ftp_service }}"
+        - "{{ ansible_facts.ansible_local.service.services.db_service }}"
+        - "{{ ansible_facts.ansible_local.service.services.web_service }}"
+        - "{{ ansible_facts.ansible_local.service.services.firewall_service }}"
+    - name: opening firewalld services
+      firewalld:
+        service: "{{ item }}"
+        permanent: true
+        state: enabled
+        immediate: true
+      with_items:
+        - "samba"
+        - "ftp"
+        - "mysql"
+        - "http"
+        - "https"
+    - name: creating index.html file
+      copy:
+        content: "Welcome to the Ansible Web Server."
+        dest: /var/www/html/index.html
+        owner: apache
+        group: apache
+        mode: "0644"

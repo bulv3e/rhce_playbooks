@@ -1,0 +1,60 @@
+---
+- hosts: ansible2
+  vars_files:
+    - packages.yaml
+  tasks:
+    - name: prepering to install packages
+      block:
+        - name: checking distribution distribution version
+          fail:
+          when: ansible_facts.distribution_version < "8"
+        - name: install httpd and mod_ssl packages
+          debug:
+            msg: "{{ item }}"
+          loop:
+            - "{{ packages }}"
+          when: |
+            (ansible_facts.distribution == "CentOS" or
+            ansible_facts.distribution == "RedHat" or
+            ansible_facts.distribution == "Rocky")
+            and (ansible_facts.distribution_version >= "8")
+      rescue:
+        - name: rescuing
+          debug:
+            msg: Host {{ ansible_facts.hostname }} does not meet minimal requirements
+
+- hosts: localhost
+  tasks:
+    - name: creating file in localhost
+      copy:
+        content: welcome to my webserver
+        dest: /tmp/index.html
+        mode: 0644
+
+- hosts: ansible2
+  name: coping files
+  tasks:
+    - name: opening firewall http and https ports
+      firewalld:
+        service: "{{ item }}"
+        permanent: true
+        state: enabled
+        immediate: true
+      with_items:
+        - http
+        - https
+    - name: copying index file to web server
+      copy:
+        src: /tmp/index.html
+        dest: /var/www/html/
+        mode: 0644
+        owner: apache
+        group: apache
+      notify:
+        - httpd restart
+
+  handlers:
+    - name: httpd restart
+      service:
+        name: httpd
+        state: restarted

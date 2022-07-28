@@ -1,0 +1,23 @@
+---
+- name: deploy custom facts
+  hosts: all
+  vars:
+    destination: /etc/ansible/facts.d
+  tasks:
+    - name: creating directory
+      file:
+        path: "{{ destination }}"
+        state: directory
+        owner: root
+        group: root
+        mode: 0760
+    - name: deploy custom facts
+      copy:
+        src: "{{ item }}"
+        dest: "{{ destination }}"
+        owner: root
+        group: root
+        mode: 0600
+      with_items:
+        - files.fact
+        - service.fact
