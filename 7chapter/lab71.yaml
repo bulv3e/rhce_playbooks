@@ -3,7 +3,7 @@
   vars_files:
     - packages.yaml
   tasks:
-    - name: prepering to install packages
+    - name: preparing to install packages
       block:
         - name: checking distribution distribution version
           fail:
