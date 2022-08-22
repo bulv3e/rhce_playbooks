@@ -1,0 +1,9 @@
+---
+- name: creating hosts file
+  hosts: all
+  tasks:
+    - name: creating hosts file
+      template:
+        src: templates/hosts.j2
+        dest: /etc/hosts_test
+        mode: 0640

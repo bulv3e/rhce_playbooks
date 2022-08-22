@@ -1,0 +1,49 @@
+---
+- name: lab82
+  hosts: all
+  vars:
+    anonymous_enable: "YES"
+    local_enable: "YES"
+    write_enable: "YES"
+    anon_upload_enable: "YES"
+  tasks:
+    - name: installing vsftpd
+      yum:
+        name: vsftpd
+        state: present
+    - name: pushing vsftp configuration
+      template:
+        src: templates/vsftpd.j2
+        dest: /etc/vsftpd/vsftpd.conf
+        mode: 0600
+        owner: root
+        group: root
+    - name: ensure directory with correct permissions
+      file:
+        path: /var/ftp/pub
+        state: directory
+        mode: 0777
+    - name: ensure that selinux ansible configuration module is installed
+      yum:
+        name: policycoreutils-python-utils
+    - name: enabling ftpd_anon_write boolean
+      seboolean:
+        name: ftpd_anon_write
+        state: true
+        persistent: true
+    - name: changing selinux context type to the /var/ftp/pub directory
+      sefcontext:
+        target: '/var/ftp/pub(/.*)?'
+        setype: public_content_rw_t
+      notify: restorecon
+    - name: opening ftp tcp ports
+      firewalld:
+        zone: public
+        permanent: true
+        immediate: true
+        service: ftp
+        state: enabled
+  handlers:
+    - name: restorecon
+      command:
+        cmd: restorecon -R /var/ftp/pub
