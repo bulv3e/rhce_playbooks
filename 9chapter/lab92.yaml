@@ -1,0 +1,19 @@
+---
+- hosts: all
+  vars:
+    selinux_state: enforcing
+    selinux_booleans:
+      - { name: 'cron_can_relabel', state: 'on' }
+    selinux_ports:
+      - { ports: '82', proto: 'tcp', setype: 'http_port_t' }
+    selinux_fcontexts:
+      - { target: '/var/ftp/uploads', setype: 'public_content_rw_t', ftype: 'd' }
+  tasks:
+    - name: creating a directory
+      file:
+        path: /var/ftp/uploads
+        state: directory
+        mode: '0777'
+    - name: including role
+      include_role:
+        name: rhel-system-roles.selinux

@@ -1,0 +1,17 @@
+---
+- name: lab91
+  hosts: ansible1
+  tasks:
+    - name: collecting facts about packages
+      package_facts:
+        manager: auto
+
+    - name: including nginx role
+      include_role:
+        name: geerlingguy.nginx
+      when: "'httpd' not in ansible_facts.packages"
+
+    - name: including postgresql role
+      include_role:
+        name: geerlingguy.postgresql
+      when: "'mysql' not in ansible_facts.packages"
