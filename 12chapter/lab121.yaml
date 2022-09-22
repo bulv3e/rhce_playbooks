@@ -1,0 +1,78 @@
+---
+- hosts: ansible1
+  tasks:
+    - name: creating /repo catalog
+      file:
+        path: /repo
+        state: directory
+        mode: '0755'
+
+    - name: installing packages
+      yum:
+        name:
+          - httpd
+          - createrepo_c
+
+    - name: downloading nginx rpm packages
+      yum:
+        name: nginx
+        download_only: true
+        download_dir: /repo
+
+    - name: changing selinux context
+      sefcontext:
+        target: '/repo(/.*)?'
+        setype: httpd_sys_content_t
+        state: present
+
+    - name: runing restorecon
+      command:
+        cmd: restorecon -irv /repo
+      changed_when: true
+      register: restorecon
+
+    - name: checking restorecon status
+      debug:
+        var: restorecon.stdout
+
+    - name: running createrepo command
+      command:
+        cmd: createrepo /repo
+      changed_when: true
+      register: createrepo_var
+
+    - name: cheking status of createrepo command
+      debug:
+        var: createrepo_var.stdout
+
+    - name: changing repodata permissions
+      file:
+        path: /repo
+        owner: root
+        group: root
+        mode: 0755
+        recurse: true
+
+    - name: enable firewall http/https ports
+      firewalld:
+        zone: public
+        service: "{{ item }}"
+        permanent: true
+        immediate: true
+        state: enabled
+      loop:
+        - http
+        - https
+
+    - name: changing httpd config
+      template:
+        src: httpd.j2
+        dest: /etc/httpd/conf/httpd.conf
+        mode: 0644
+        owner: root
+        group: root
+
+    - name: reloading httpd config
+      service:
+        name: httpd
+        state: reloaded

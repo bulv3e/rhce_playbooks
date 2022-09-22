@@ -1,0 +1,20 @@
+---
+- hosts: all
+  tasks:
+    - name: installing repo
+      yum_repository:
+        name: custom_nginx_repo
+        description: custom nginx repository
+        baseurl:
+          - http://172.20.80.2/
+        gpgcheck: false
+    - name: installing nginx packages from custom_nginx_repo
+      yum:
+        name: nginx
+        enablerepo: custom_nginx_repo
+    - name: collecting package package facts
+      package_facts:
+        manager: auto
+    - name: cheking nginx package
+      debug:
+        var: ansible_facts.packages.nginx

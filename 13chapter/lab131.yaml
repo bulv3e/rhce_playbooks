@@ -1,0 +1,29 @@
+---
+- hosts: all
+  tasks:
+    - name: creating group profs
+      group:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - profs
+        - students
+
+    - name: creating users
+      user:
+        name: "{{ item.name }}"
+        groups: "{{ item.group }}"
+        password: "$6$kdjgjkdgndk$vrg8IN2clXBG/CUhCovHEErv3PUMNbWjLt1yWcwbI2hkPKx.ikRdQEZzdJ3Rii6pd4IuBFv2CZc5RReWbUlzg1"
+      loop:
+        - { group: profs, name: kim }
+        - { group: profs, name: kelly }
+        - { group: students, name: christina }
+        - { group: students, name: bill }
+
+    - name: coping sudo file to sudoers
+      copy:
+        src: profs
+        dest: /etc/sudoers.d/
+        owner: root
+        group: root
+        mode: 0600
