@@ -1,0 +1,27 @@
+---
+- hosts: ansible1
+  tasks:
+  - name: creating cron job for rebooting vm at 2 a.m. eatch weekday
+    cron:
+      name: reboot at weekdays
+      weekday: "*"
+      minute: "0"
+      hour: "2"
+      job: "sudo reboot"
+  - name: creting cron after reboot
+    cron:
+      name: after reboot
+      special_time: reboot
+      job: "sudo logger 'CRON initialed reboot just completed.'"
+  - name: setting default systemdtarget to multi-user target
+    file:
+      src: /usr/lib/systemd/system/multi-user.target
+      dest: /etc/systemd/system/default.target
+      owner: root
+      group: root
+      state: link
+  - name: crond status
+    package_facts:
+  - name: debuging
+    debug:
+      msg: "{{ ansible_facts.packages.cronie.0.version }}"
