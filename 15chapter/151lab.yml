@@ -1,0 +1,28 @@
+---
+- hosts: all
+  tasks:
+  - name: cheking if sdb disk is pressent
+    fail:
+      msg: device sdb not present
+    when: ansible_facts.devices.sdb is not defined
+  - name: umounting /files
+    mount:
+      path: /files
+      src: /dev/mapper/vgfiles-lvfiles
+      fstype: xfs
+      state: absent
+  - name: deleting vgfiles-lvfiles lv
+    lvol:
+      vg: vgfiles
+      lv: lvfiles
+      state: absent
+      force: true
+  - name: deleting vgfiles vg
+    lvg:
+      vg: vgfiles
+      state: absent
+  - name: deleting partition
+    parted:
+      device: /dev/sdb
+      number: 1
+      state: absent

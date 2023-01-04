@@ -1,0 +1,51 @@
+---
+- hosts: all
+  tasks:
+  - name: cheking if sdb disk is pressent
+    fail:
+      msg: device sdb not present
+    when: ansible_facts.devices.sdb is not defined
+  - name: creating sdb1 partition
+    parted:
+      device: /dev/sdb
+      number: 1
+      flags: [lvm]
+      state: present
+      part_start: 1MiB
+      part_end: 100%
+    when: ansible_facts.devices.sdb.partitions.sdb1 is not defined
+  - name: creating volume group vgfiles
+    lvg:
+      vg: vgfiles
+      pvs: /dev/sdb1
+    when: ansible_facts.devices.sdb.partitions.sdb1 is defined
+  - name: creating lv 6G
+    lvol:
+      vg: vgfiles
+      lv: lvfiles
+      size: 6g
+    when: ansible_facts.lvm.vgs.vgfiles.size_g | int > 5.00
+  - name: creating lv 3G
+    lvol:
+      vg: vgfiles
+      lv: lvfiles
+      size: 3g
+    when: ansible_facts.lvm.vgs.vgfiles.size_g | int <= 5.00
+  - name: formating logical volume lvfiles to xfs fs
+    filesystem:
+      fstype: xfs
+      dev: /dev/mapper/vgfiles-lvfiles
+    when: ansible_facts.lvm.lvs.lvfiles is defined
+  - name: creating files direcory for mounts
+    file:
+      name: /files
+      owner: root
+      group: root
+      mode: 0744
+      state: directory
+  - name: mountig vgfiles-lvfiles disk
+    mount:
+      path: /files
+      src: /dev/mapper/vgfiles-lvfiles
+      fstype: xfs
+      state: mounted
