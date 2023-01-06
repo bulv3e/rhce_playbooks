@@ -1,0 +1,16 @@
+NAME=localhost.localdomain
+IPADDRESS=192.168.1.11
+DISKS=['dm-1', 'sdb', 'sr0', 'dm-2', 'dm-0', 'sda']
+SECOND_DISK_NAME=sdb
+NAME=localhost.localdomain
+IPADDRESS=192.168.1.12
+DISKS=['dm-1', 'sdb', 'sr0', 'dm-2', 'dm-0', 'sda']
+SECOND_DISK_NAME=sdb
+NAME=localhost.localdomain
+IPADDRESS=192.168.1.13
+DISKS=['dm-1', 'sr0', 'dm-0', 'sda']
+SECOND_DISK_NAME=NONE
+NAME=localhost.localdomain
+IPADDRESS=192.168.1.14
+DISKS=['dm-1', 'sr0', 'dm-0', 'sda']
+SECOND_DISK_NAME=NONE

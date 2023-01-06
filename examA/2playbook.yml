@@ -1,0 +1,15 @@
+---
+- hosts: all
+  tasks:
+    - fail:
+        msg: "no second disk available"
+      when: ansible_facts['devices']['sdb'] is not defined
+    - name: creating volume group vgdata
+      lvg:
+        vg: vgdata
+        pvs: /dev/sdb
+    - name: creating logical volume lvdata
+      lvol:
+        vg: vgdata
+        lv: lvdata
+        size: 100%FREE

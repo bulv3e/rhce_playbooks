@@ -1,0 +1,10 @@
+{% for host in groups['all'] %}
+NAME={{ hostvars[host]['ansible_facts']['fqdn'] }}
+IPADDRESS={{ hostvars[host]['ansible_facts']['default_ipv4']['address'] }}
+DISKS={{ hostvars[host]['ansible_facts']['devices'].keys() }}
+{% if hostvars[host]['ansible_facts']['devices']['sdb'] is defined %}
+SECOND_DISK_NAME=sdb
+{% else %}
+SECOND_DISK_NAME=NONE
+{% endif %}
+{% endfor %}

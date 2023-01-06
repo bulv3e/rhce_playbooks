@@ -1,0 +1,19 @@
+---
+- hosts: dev test prod
+  tasks:
+  - name: installing packages
+    yum:
+      name:
+        - nmap
+        - wireshark
+- hosts: prod
+  tasks:
+    - name: installing virtualization packages
+      yum:
+        name: '@Virtualization Host'
+- hosts: servers
+  tasks:
+    - name: updating vm's
+      yum:
+        name: "*"
+        state: latest

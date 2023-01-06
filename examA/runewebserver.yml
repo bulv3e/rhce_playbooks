@@ -1,0 +1,55 @@
+---
+- hosts: prod
+  tasks:
+  - name: installing httpd
+    dnf:
+      name: httpd
+    notify: httpd start and enable
+  - name: opening firewalld http/https
+    firewalld:
+      zone: public
+      service: "{{ item }}"
+      permanent: yes
+      immediate: yes
+      state: enabled
+    with_items:
+      - http
+      - https
+  - name: creating directory
+    file:
+      path: /webcontent
+      state: directory
+      owner: root
+      group: root
+      mode: "0755"
+  - name: changing selinux context
+    sefcontext:
+      target: '/webcontent(/.*)?'
+      setype: httpd_sys_content_t
+      state: present
+    notify: restorecon
+  - name: creating index.html file
+    template:
+      src: index.j2
+      dest: /webcontent/index.html
+      owner: root
+      group: root
+      mode: "0644"
+  - name: creating a link to index.html
+    file:
+      src: /webcontent/index.html
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      state: link
+      force: true
+
+  handlers:
+  - name: restorecon
+    command:
+      cmd: restorecon -irv /webcontent
+  - name: httpd start and enable
+    service:
+      name: httpd
+      state: started
+      enabled: true

@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+  tasks:
+  - name: installing ftp
+    dnf:
+      name: vsftpd
+  - name: creating /var/ftp/repo directory
+    file:
+      path: /var/ftp/repo
+      state: directory
+      mode: '0777'
+  - name: mounting iso img to /var/ftp/repo directory
+    mount:
+      path: /var/ftp/repo
+      src: /dev/sr0
+      fstype: iso9660
+      opts: ro,noauto
+      state: mounted

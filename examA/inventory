@@ -1,0 +1,16 @@
+[all]
+ansible[1:4]
+
+[test]
+ansible1
+
+[dev]
+ansible2
+
+[prod]
+ansible3
+ansible4
+
+[servers:children]
+dev
+prod
