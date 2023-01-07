@@ -1,0 +1,32 @@
+---
+- hosts: all
+  tasks:
+  - fail:
+      msg: "no work to do"
+    when: ansible_facts.devices.sdb is not defined
+  - name: creating vg vgfiles
+    lvg:
+      vg: vgfiles
+      pvs: /dev/sdb
+  - name: creating lv lvfiles
+    lvol:
+      vg: vgfiles
+      lv: lvfiles
+      size: 1g
+  - name: formating lvfiles
+    filesystem:
+      fstype: xfs
+      dev: /dev/mapper/vgfiles-lvfiles
+  - name: creating lvfiles direcotry
+    file:
+      path: /lvfiles
+      state: directory
+      owner: root
+      group: root
+      mode: '0755'
+  - name: mounting created lv to directory /lvfiles
+    mount:
+      path: /lvfiles
+      src: /dev/mapper/vgfiles-lvfiles
+      fstype: xfs
+      state: mounted

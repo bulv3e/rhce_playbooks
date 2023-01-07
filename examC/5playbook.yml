@@ -1,0 +1,36 @@
+---
+- hosts: all
+  tasks:
+  - name: installing httpd
+    dnf:
+      name:
+      - httpd
+      - policycoreutils-python-utils
+  - name: allowing in selinux httpd port to listen 88
+    seport:
+      ports: 88
+      proto: tcp
+      setype: http_port_t
+      state: present
+  - name: changing httpd listening port to 88
+    lineinfile:
+      path: /etc/httpd/conf/httpd.conf
+      regex: '^Listen'
+      line: 'Listen 88'
+    notify: httpd reload
+  - name: opening firewalld 88 tcp port
+    firewalld:
+      zone: public
+      port: 88/tcp
+      permanent: yes
+      immediate: yes
+      state: enabled
+  - name: checking connectivity
+    uri:
+      url: http://{{ ansible_facts.fqdn }}:88
+    delegate_to: localhost
+  handlers:
+  - name: httpd reload
+    service:
+      name: httpd
+      state: reloaded

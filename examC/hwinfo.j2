@@ -1,0 +1,14 @@
+{% for host in groups['all'] %}
+{% if hostvars[host]['ansible_facts']['devices']['sda'] is defined %}
+primary device {{ hostvars[host]['ansible_facts']['devices'].keys() | regex_search('sda') }} found on {{ hostvars[host]['ansible_facts']['fqdn'] }}
+{% elif hostvars[host]['ansible_facts']['devices']['vda'] is defined %}
+primary device {{ hostvars[host]['ansible_facts']['devices'].keys() | regex_search('vda') }} found on {{ hostvars[host]['ansible_facts']['fqdn'] }}
+{% endif %}
+{% if hostvars[host]['ansible_facts']['devices']['sdb'] is defined %}
+second device {{ hostvars[host]['ansible_facts']['devices'].keys() | regex_search('sdb') }} found on {{ hostvars[host]['ansible_facts']['fqdn'] }}
+{% elif hostvars[host]['ansible_facts']['devices']['vdb'] is defined %}
+second device {{ hostvars[host]['ansible_facts']['devices'].keys() | regex_search('vdb') }} found on {{ hostvars[host]['ansible_facts']['fqdn'] }}
+{% else %}
+no second device found on {{ hostvars[host]['ansible_facts']['fqdn'] }}
+{% endif %}
+{% endfor %}

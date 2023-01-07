@@ -1,0 +1,7 @@
+---
+- hosts: all
+  tasks:
+  - name: deploying /tmp/hosts from gathered facts
+    template:
+      src: hosts.j2
+      dest: /tmp/hosts

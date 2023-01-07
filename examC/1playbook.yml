@@ -1,0 +1,8 @@
+---
+- hosts: all
+  tasks:
+  - name: from fetched facts creating devices.txt file
+    template:
+      src: /home/ansible/hwinfo.j2
+      dest: /tmp/devices.txt
+    delegate_to: localhost
