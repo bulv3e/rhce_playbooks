@@ -1,0 +1,14 @@
+---
+- hosts: all
+  tasks:
+  - name: creating username
+    user:
+      name: anna
+      password: '$6$fsdkhfiklsdfsd$vfuOSigSQKV9OMSuWnXSK2p6ICzmNlCOnyC1Ra3Z/cJpUxa/RU91y1jVPKJ1N/I6eR10VvgS7xnX9zD8FS8bh1'
+  - name: creating sudo privileges to anna user
+    copy:
+      content: 'anna        ALL=(ALL)       NOPASSWD: ALL'
+      dest: /etc/sudoers.d/anna
+      owner: root
+      group: root
+      mode: '0600'

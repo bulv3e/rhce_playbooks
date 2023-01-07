@@ -1,0 +1,22 @@
+---
+- hosts: ansible2
+  tasks:
+  - name: ensure that /etc/ansible/facts.d directory exist
+    file:
+      path: /etc/ansible/facts.d
+      owner: root
+      group: root
+      mode: '0755'
+      recurse: true
+  - name: deploying custom facts
+    copy:
+      dest: /etc/ansible/facts.d/custom.fact
+      content: |
+        [packages]
+        package1=samba
+        package2=mariadb-server
+        service1=smb
+        service2=mariadb
+      owner: root
+      group: root
+      mode: '0644'

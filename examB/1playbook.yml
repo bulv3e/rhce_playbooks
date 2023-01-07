@@ -1,0 +1,27 @@
+---
+- hosts: dev
+  tasks:
+  - name: installing vsftpd
+    dnf:
+      name: vsftpd
+      state: latest
+  - name: enabling and starting vsftpd service
+    service:
+      name: vsftpd
+      state: started
+      enabled: true
+  - name: opening firewalld ports
+    firewalld:
+      zone: public
+      service: ftp
+      permanent: yes
+      immediate: yes
+      state: enabled
+  - name: creating readme file
+    copy:
+      content: "welcome to the vsftpd service."
+      dest: /var/ftp/pub/README.txt
+      owner: root
+      group: root
+      mode: '0644'
+

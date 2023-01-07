@@ -1,0 +1,16 @@
+---
+- hosts: ansible3
+  tasks:
+  - block:
+    - name: changeing selinux config mode to permissive
+      lineinfile:
+        path: /etc/selinux/config
+        regexp: '^SELINUX='
+        line: SELINUX=permissive
+    - name: rebooting a vm
+      reboot:
+        post_reboot_delay: 30
+    when: ansible_facts.selinux.config_mode == "enforcing"
+  - debug:
+      msg: "no change was made"
+    when: ansible_facts.selinux.config_mode == "permissive"

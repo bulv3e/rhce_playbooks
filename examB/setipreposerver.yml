@@ -1,0 +1,32 @@
+---
+- hosts: localhost
+  tasks:
+  - name: installing vsftpd
+    dnf:
+      name: vsftpd
+  - name: ensuring that vsftpd service is enabled and started
+    service:
+      name: vsftpd
+      state: started
+      enabled: true
+  - name: creating direcotry /var/ftp/repo
+    file:
+      path: /var/ftp/repo
+      owner: root
+      group: root
+      mode: '0755'
+      state: directory
+  - name: pushing vsftpd configuration
+    copy:
+      src: /home/ansible/vsftpd.conf
+      dest: /etc/vsftpd/vsftpd.conf
+      owner: root
+      group: root
+      mode: '0600'
+  - name: mounting iso img
+    mount:
+      path: /var/ftp/repo
+      src: /dev/sr0
+      fstype: iso9660
+      opts: ro,noauto
+      state: mounted

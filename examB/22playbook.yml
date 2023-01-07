@@ -1,0 +1,17 @@
+---
+- hosts: ansible2
+  tasks:
+  - name: installing packages form custom facts
+    dnf:
+      name:
+        - "{{ ansible_facts.ansible_local.custom.packages.package1 }}"
+        - "{{ ansible_facts.ansible_local.custom.packages.package2 }}"
+  - name: starting and enabling services
+    service:
+      name: "{{ item }}"
+      state: started
+      enabled: true
+    with_items:
+      - "{{ ansible_facts.ansible_local.custom.packages.service1 }}"
+      - "{{ ansible_facts.ansible_local.custom.packages.service2 }}"
+

@@ -1,0 +1,162 @@
+            "mariadb": [
+                {
+                    "arch": "x86_64",
+                    "epoch": 3,
+                    "name": "mariadb",
+                    "release": "1.module+el8.6.0+1005+cdf19c22",
+                    "source": "rpm",
+                    "version": "10.3.35"
+                }
+            ],
+            "mariadb-backup": [
+                {
+                    "arch": "x86_64",
+                    "epoch": 3,
+                    "name": "mariadb-backup",
+                    "release": "1.module+el8.6.0+1005+cdf19c22",
+                    "source": "rpm",
+                    "version": "10.3.35"
+                }
+            ],
+            "mariadb-common": [
+                {
+                    "arch": "x86_64",
+                    "epoch": 3,
+                    "name": "mariadb-common",
+                    "release": "1.module+el8.6.0+1005+cdf19c22",
+                    "source": "rpm",
+                    "version": "10.3.35"
+                }
+            ],
+            "mariadb-connector-c": [
+                {
+                    "arch": "x86_64",
+                    "epoch": null,
+                    "name": "mariadb-connector-c",
+                    "release": "2.el8_3",
+                    "source": "rpm",
+                    "version": "3.1.11"
+                }
+            ],
+            "mariadb-connector-c-config": [
+                {
+                    "arch": "noarch",
+                    "epoch": null,
+                    "name": "mariadb-connector-c-config",
+                    "release": "2.el8_3",
+                    "source": "rpm",
+                    "version": "3.1.11"
+                }
+            ],
+            "mariadb-errmsg": [
+                {
+                    "arch": "x86_64",
+                    "epoch": 3,
+                    "name": "mariadb-errmsg",
+                    "release": "1.module+el8.6.0+1005+cdf19c22",
+                    "source": "rpm",
+                    "version": "10.3.35"
+                }
+            ],
+            "mariadb-gssapi-server": [
+                {
+                    "arch": "x86_64",
+                    "epoch": 3,
+                    "name": "mariadb-gssapi-server",
+                    "release": "1.module+el8.6.0+1005+cdf19c22",
+                    "source": "rpm",
+                    "version": "10.3.35"
+                }
+            ],
+            "mariadb-server": [
+                {
+                    "arch": "x86_64",
+                    "epoch": 3,
+                    "name": "mariadb-server",
+                    "release": "1.module+el8.6.0+1005+cdf19c22",
+                    "source": "rpm",
+                    "version": "10.3.35"
+                }
+            ],
+            "mariadb-server-utils": [
+                {
+                    "arch": "x86_64",
+                    "epoch": 3,
+                    "name": "mariadb-server-utils",
+                    "release": "1.module+el8.6.0+1005+cdf19c22",
+                    "source": "rpm",
+                    "version": "10.3.35"
+                }
+            ],
+--
+            "python3-samba": [
+                {
+                    "arch": "x86_64",
+                    "epoch": 0,
+                    "name": "python3-samba",
+                    "release": "2.el8",
+                    "source": "rpm",
+                    "version": "4.16.4"
+                }
+            ],
+--
+            "samba": [
+                {
+                    "arch": "x86_64",
+                    "epoch": 0,
+                    "name": "samba",
+                    "release": "2.el8",
+                    "source": "rpm",
+                    "version": "4.16.4"
+                }
+            ],
+            "samba-client-libs": [
+                {
+                    "arch": "x86_64",
+                    "epoch": 0,
+                    "name": "samba-client-libs",
+                    "release": "2.el8",
+                    "source": "rpm",
+                    "version": "4.16.4"
+                }
+            ],
+            "samba-common": [
+                {
+                    "arch": "noarch",
+                    "epoch": 0,
+                    "name": "samba-common",
+                    "release": "2.el8",
+                    "source": "rpm",
+                    "version": "4.16.4"
+                }
+            ],
+            "samba-common-libs": [
+                {
+                    "arch": "x86_64",
+                    "epoch": 0,
+                    "name": "samba-common-libs",
+                    "release": "2.el8",
+                    "source": "rpm",
+                    "version": "4.16.4"
+                }
+            ],
+            "samba-common-tools": [
+                {
+                    "arch": "x86_64",
+                    "epoch": 0,
+                    "name": "samba-common-tools",
+                    "release": "2.el8",
+                    "source": "rpm",
+                    "version": "4.16.4"
+                }
+            ],
+            "samba-libs": [
+                {
+                    "arch": "x86_64",
+                    "epoch": 0,
+                    "name": "samba-libs",
+                    "release": "2.el8",
+                    "source": "rpm",
+                    "version": "4.16.4"
+                }
+            ],

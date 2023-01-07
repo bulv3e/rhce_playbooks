@@ -1,0 +1,15 @@
+---
+- hosts: dev prod
+  vars_files:
+    - secret.yml
+  tasks:
+  - name: Ensure group "{{ groupname }}" exists
+    group:
+      name: "{{ groupname }}"
+      state: present
+  - name: create users
+    user:
+      name: "{{ username }}"
+      group: "{{ groupname }}"
+      password: "{{ password }}"
+
