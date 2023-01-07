@@ -1,0 +1,5 @@
+---
+- name: importing webserver tasks
+  import_tasks: webserver.yml 
+- name: importing webclient tasks
+  import_tasks: webclient.yml

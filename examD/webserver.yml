@@ -1,0 +1,20 @@
+---
+- hosts: webservers
+  vars_files:
+    - /home/ansible/vars/vars.yml
+  tasks:
+  - name: installing httpd package
+    dnf:
+      name: "{{ web_server }}"
+  - name: deploying httpd template
+    template:
+      src: httpd.j2
+      dest: "{{ web_config_file }}"
+      mode: "0644"
+    notify: httpd restart
+
+  handlers:
+  - name: httpd restart
+    service:
+      name: httpd
+      state: restarted

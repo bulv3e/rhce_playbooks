@@ -1,0 +1,14 @@
+---
+- name: installing curl
+  dnf:
+    name: "{{ web_client }}"
+- name: installing httpd
+  dnf:
+    name: "{{ web_server }}"
+- name: opening firewalld port
+  firewalld:
+    zone: public
+    service: http
+    permanent: yes
+    immediate: yes
+    state: enabled

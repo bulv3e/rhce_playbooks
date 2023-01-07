@@ -1,0 +1,10 @@
+---
+- name: installing httpd package
+  dnf:
+    name: "{{ web_server }}"
+- name: deploying httpd template
+  template:
+    src: httpd.j2
+    dest: "{{ web_config_file }}"
+    mode: "0644"
+  notify: httpd restart

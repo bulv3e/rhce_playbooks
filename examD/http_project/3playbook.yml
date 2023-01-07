@@ -1,0 +1,52 @@
+---
+- hosts: webservers webclients
+  roles:
+    - http
+  vars:
+    - web_dir: /web
+    - welinux_type: httpd_sys_content_t
+    - web_file: /web/index.html
+  tasks:
+  - fail:
+      msg: no second disk available
+    when: ansible_facts.devices.sdb is not defined
+  - name: installing selinux packages
+    dnf:
+      name: policycoreutils-python-utils
+  - name: creating second disk partition
+    parted:
+      device: /dev/sdb
+      number: 1
+      state: present
+      fs_type: xfs
+      part_start: 1MiB
+      part_end: "100%"
+  - name: formating sdb1 partition to xfs
+    filesystem:
+      fstype: xfs
+      dev: /dev/sdb1
+  - name: creating /web directory
+    file:
+      path: "{{ web_dir }}"
+      state: directory
+      mode: "0755"
+  - name: mounting sdb1 partition to /web directory
+    mount:
+      path: "{{ web_dir }}"
+      src: /dev/sdb1
+      fstype: xfs
+      opts: noatime
+      state: mounted
+  - name: changing selinux type
+    sefcontext:
+      target: '/web(/.*)?'
+      setype: "{{ welinux_type }}"
+      state: present
+  - name: doing restorecon
+    command:
+      cmd: restorecon -irv "{{ web_dir }}"
+  - name: creating index.html file in /web directory
+    copy:
+      content: 'welcome to my custom web server.'
+      dest: /web/index.html
+      mode: "0644"
